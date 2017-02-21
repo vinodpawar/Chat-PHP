@@ -8,38 +8,70 @@ include 'db.php';
 
 	<head>
 		<title>Chat System using PHP and AJAX</title>
+		
+		<script>
+		
+			function ajax() {
+				
+				var req = new XMLHttpRequest();
+				req.onreadystatechange = function(){
+					
+					if(req.readyState == 4 && req.status == 200) {
+						
+						document.getElementById('chat').innerHTML = req.responseText;
+						
+					}
+				}
+				
+				req.open('GET','chat.php','true');
+				req.send();
+			}
+			
+			setInterval(function(){ajax();},1000);
+			
+		</script>
+		
 	</head>
 
 	<link rel="stylesheet" href="styles/theme.css" type="text/css">
 		
-<body>
+<body onload="ajax();">
 
 	<div id="container">
 	
 		<div id="chat_box">
-		<?PHP
-		
-			$query = "select * from chat ORDER BY id DESC";
-			$run = $con->query($query);
+			<div id="chat">
 			
-			while($row = $run->fetch_array()) :
-				
-		?>
-			<div id="chat_data">
-				<span style="color: green;"><?PHP echo $row['name'].":"; ?></span>
-				<span style="color: brown;"><?PHP echo $row['msg']; ?></span>
-				<span style="float: right;"><?PHP echo $row['date']; ?></span>
 			</div>
-			<?PHP endwhile; ?>
 			
 		</div>	
 		
 		<form method="POST" action="index.php">
 			<input type="text" name="name" placeholder="Enter name" />
-			<textarea name="enter message" name="enter message" placeholder="Enter message"></textarea>
+			<textarea name="msg" placeholder="Enter message"></textarea>
 			<input type="submit" name="submit" value="Send" />
 			
 		</form>
+		
+		<?PHP
+		
+		if(isset($_POST['submit'])) {
+	
+		$name = $_POST['name'];
+		$msg = $_POST['msg'];	
+	
+		$insertQuery = "insert into chat(name,msg) values('$name','$msg')";
+		
+		$run = $con->query($insertQuery);
+		
+		if($run) {
+			
+			echo "<embed loop='false' src='chat.wav' hidden='true' autoplay='true'>";
+		}
+		
+		}
+
+		?>
 	</div>
 
 </body>
