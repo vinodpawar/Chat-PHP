@@ -26,9 +26,9 @@ include 'db.php';
 				
 		?>
 			<div id="chat_data">
-				<span style="color: green;">Vinod: </span>
-				<span style="color: brown;">Hey there!</span>
-				<span style="float: right;">11:47 AM</span>
+				<span style="color: green;"><?PHP echo $row['name'].":"; ?></span>
+				<span style="color: brown;"><?PHP echo $row['msg']; ?></span>
+				<span style="float: right;"><?PHP echo $row['date']; ?></span>
 			</div>
 			<?PHP endwhile; ?>
 			
